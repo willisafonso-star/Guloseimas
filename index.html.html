@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <title>Guloseimas da Isa</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; width: 100%; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fdf4e8;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(236, 152, 168, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(196, 137, 92, 0.12) 0%, transparent 40%);
+    }
+    .font-display { font-family: 'Fraunces', serif; }
+    .chip { transition: all 0.2s ease; cursor: pointer; }
+    .chip.selected { transform: translateY(-2px); }
+  </style>
+</head>
+<body class="h-full w-full">
+  <main class="h-full w-full overflow-auto">
+    <div class="max-w-6xl mx-auto px-6 py-10">
+      <header class="text-center mb-10">
+        <div class="inline-block mb-3 text-5xl">🎂</div>
+        <h1 class="font-display text-5xl md:text-6xl font-800 text-[#5c3a2e] mb-2">Guloseimas da Isa</h1>
+        <p class="font-display italic text-lg text-[#a06b4f]">Bolos artesanais feitos com amor</p>
+      </header>
+
+      <section id="order-section" class="bg-white rounded-3xl shadow-xl p-8 md:p-10 border-4 border-[#f4d9b8]">
+        <div class="mb-8">
+          <h2 class="font-display text-2xl font-600 text-[#5c3a2e] mb-1">1. Escolha a Massa</h2>
+          <div id="massas-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+        </div>
+
+        <div class="mb-8">
+          <h2 class="font-display text-2xl font-600 text-[#5c3a2e] mb-1">2. Escolha o Recheio</h2>
+          <div id="recheios-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+        </div>
+
+        <div class="mb-8">
+          <h2 class="font-display text-2xl font-600 text-[#5c3a2e] mb-1">3. Escolha a Cobertura</h2>
+          <div id="coberturas-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+        </div>
+
+        <div class="mb-2">
+          <h2 class="font-display text-2xl font-600 text-[#5c3a2e] mb-1">4. Tamanho</h2>
+          <div id="tamanhos-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+        </div>
+        <p class="text-sm font-semibold text-[#c4895c] mb-8 italic">
+          (Bolo da vovó não acompanha recheio)
+        </p>
+
+        <div class="mb-8 border-t-2 border-dashed border-[#f4d9b8] pt-6">
+          <h2 class="font-display text-2xl font-600 text-[#5c3a2e] mb-4">5. Seus Dados</h2>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-[#5c3a2e] mb-1">Nome</label>
+              <input id="nome" type="text" class="w-full px-4 py-3 rounded-xl bg-[#fdf4e8] border-2 border-[#f4d9b8] focus:border-[#c4895c]" placeholder="Seu nome completo">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-[#5c3a2e] mb-1">Telefone</label>
+              <input id="telefone" type="tel" class="w-full px-4 py-3 rounded-xl bg-[#fdf4e8] border-2 border-[#f4d9b8] focus:border-[#c4895c]" placeholder="(11) 99999-9999">
+            </div>
+          </div>
+          
+          <div class="mt-4">
+            <label class="block text-sm font-semibold text-[#5c3a2e] mb-1">Observações Especiais (Opcional)</label>
+            <textarea id="observacoes" rows="3" class="w-full px-4 py-3 rounded-xl bg-[#fdf4e8] border-2 border-[#f4d9b8] focus:border-[#c4895c]" placeholder="Alergias, restrições, texto para topo de bolo, etc..."></textarea>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-[#fdf4e8] to-[#f4d9b8] rounded-2xl p-5 mb-6 border-2 border-[#e8b890]">
+          <h3 class="font-display text-xl font-600 text-[#5c3a2e] mb-3">Resumo do Pedido</h3>
+          <div id="resumo-content" class="text-sm text-[#5c3a2e] space-y-1"></div>
+          <div class="mt-4 pt-3 border-t border-[#e8b890] flex justify-between items-center">
+            <span class="font-display text-lg text-[#5c3a2e]">Total</span>
+            <span id="total-preco" class="font-display text-3xl font-800 text-[#5c3a2e]">R$ 0,00</span>
+          </div>
+        </div>
+
+        <button id="submit-btn" class="w-full py-4 rounded-2xl bg-[#5c3a2e] hover:bg-[#4a2d22] text-white font-semibold text-lg transition-all flex items-center justify-center gap-2">
+          <i data-lucide="cake"></i> Finalizar e enviar Pedido
+        </button>
+      </section>
+      
+      <footer class="text-center py-10 text-3xl">
+        🎂
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    // CONFIGURAÇÕES (Lembre-se de mudar)
+    const WHATSAPP_NUMERO = "5511999999999"; 
+    const FORM_EMAIL = "seuemail@exemplo.com"; // Para integração com Formspree
+
+    // CATÁLOGO COM EMOJIS CORRIGIDOS
+    const MASSAS = [
+      { id: 'baunilha', nome: 'Baunilha', emoji: '🤍', preco: 5 },
+      { id: 'chocolate', nome: 'Chocolate', emoji: '🍫', preco: 5 },
+      { id: 'red-velvet', nome: 'Red Velvet', emoji: '❤️', preco: 10 },
+      { id: 'cenoura', nome: 'Cenoura', emoji: '🥕', preco: 5 },
+      { id: 'paodemel', nome: 'Pão de Mel', emoji: '🍯', preco: 8 },
+    ];
+    const RECHEIOS = [
+      { id: 'brigadeiro', nome: 'Brigadeiro', emoji: '🟤', preco: 8 },
+      { id: 'doce-leite', nome: 'Doce de Leite', emoji: '🍯', preco: 8 },
+      { id: 'leitepomorango', nome: 'Leite em pó c/ Morangos', emoji: '🍓', preco: 15 },
+      { id: 'nutella', nome: 'Nutella', emoji: '🌰', preco: 15 },
+      { id: 'nenhum', nome: 'NENHUM', emoji: '🚫', preco: 0 }, // EMOJI ADICIONADO AQUI
+    ];
+    const COBERTURAS = [
+      { id: 'chantilly', nome: 'Chantilly', emoji: '☁️', preco: 5 },
+      { id: 'ganache', nome: 'Ganache', emoji: '🍫', preco: 10 },
+      { id: 'chantillyfrutas', nome: 'Chantilly c/ Frutas', emoji: '🍓', preco: 12 },
+      { id: 'chocolatefrutas', nome: 'Chocolate c/ Frutas', emoji: '🍒', preco: 12 },
+      { id: 'nenhum', nome: 'NENHUMA', emoji: '🚫', preco: 0 }, // EMOJI ADICIONADO AQUI
+    ];
+    const TAMANHOS = [
+      { id: 'p', nome: 'Pequeno', desc: '10 fatias', preco: 60, emoji: '🎂' }, // EMOJI ADICIONADO AQUI
+      { id: 'm', nome: 'Médio', desc: '20 fatias', preco: 100, emoji: '🎂' },  // EMOJI ADICIONADO AQUI
+      { id: 'g', nome: 'Grande', desc: '40 fatias', preco: 180, emoji: '🎂' }, // EMOJI ADICIONADO AQUI
+      { id: 'vovo', nome: 'Bolo da Vovó', desc: 'Especial', preco: 45, emoji: '👵' }, // EMOJI TEMÁTICO
+    ];
+
+    let state = { massa: null, recheio: null, cobertura: null, tamanho: null };
+
+    // FUNÇÃO QUE GERA OS QUADRINHOS (CORRIGIDA)
+    function renderChips(gridId, items, field) {
+      const grid = document.getElementById(gridId);
+      grid.innerHTML = items.map(item => `
+        <div class="chip rounded-2xl p-4 border-2 text-center bg-[#fdf4e8] border-[#f4d9b8]" data-id="${item.id}">
+          <div class="text-3xl mb-1">${item.emoji || '✨'}</div>
+          <div class="font-semibold text-sm text-[#5c3a2e]">${item.nome}</div>
+          ${item.desc ? `<div class="text-xs text-[#a06b4f]">${item.desc}</div>` : ''}
+          <div class="text-xs mt-1 font-semibold text-[#c4895c]">
+            ${item.preco > 0 ? '+R$ ' + item.preco.toFixed(2) : (field === 'tamanho' ? 'R$ ' + item.preco.toFixed(2) : 'Grátis')}
+          </div>
+        </div>
+      `).join('');
+
+      grid.querySelectorAll('.chip').forEach(el => {
+        el.addEventListener('click', () => {
+          const item = items.find(i => i.id === el.dataset.id);
+          // LÓGICA DE DESELECIONAR: se clicar de novo, limpa a seleção
+          state[field] = (state[field]?.id === item.id) ? null : item;
+          updateUI();
+        });
+      });
+    }
+
+    function updateUI() {
+      // Atualiza seleção visual (cor de fundo)
+      ['massas-grid', 'recheios-grid', 'coberturas-grid', 'tamanhos-grid'].forEach(gridId => {
+        const field = gridId.split('-')[0].replace(/s$/, '');
+        document.querySelectorAll(`#${gridId} .chip`).forEach(el => {
+          if (state[field]?.id === el.dataset.id) {
+            el.style.background = '#5c3a2e';
+            el.style.borderColor = '#5c3a2e';
+            el.querySelectorAll('div').forEach(d => d.style.color = '#fdf4e8');
+          } else {
+            el.style.background = '#fdf4e8';
+            el.style.borderColor = '#f4d9b8';
+            el.querySelectorAll('div').forEach(d => d.style.color = '');
+          }
+        });
+      });
+
+      // Calcula e atualiza preço e resumo
+      let total = (state.tamanho?.preco || 0) + (state.massa?.preco || 0) + (state.recheio?.preco || 0) + (state.cobertura?.preco || 0);
+      document.getElementById('total-preco').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+      
+      const resumo = document.getElementById('resumo-content');
+      const parts = [];
+      if (state.massa) parts.push(`<p>Massa: <strong>${state.massa.nome}</strong></p>`);
+      if (state.recheio) parts.push(`<p>Recheio: <strong>${state.recheio.nome}</strong></p>`);
+      if (state.cobertura) parts.push(`<p>Cobertura: <strong>${state.cobertura.nome}</strong></p>`);
+      if (state.tamanho) parts.push(`<p>Tamanho: <strong>${state.tamanho.nome}</strong></p>`);
+      resumo.innerHTML = parts.length ? parts.join('') : '<p class="italic">Monte seu bolo acima...</p>';
+    }
+
+    // ENVIO DE PEDIDO (INCLUINDO OBSERVAÇÃO)
+    document.getElementById('submit-btn').addEventListener('click', async () => {
+      const nome = document.getElementById('nome').value;
+      const tel = document.getElementById('telefone').value;
+      const obs = document.getElementById('observacoes').value; // PEGA O TEXTO DAS OBSERVAÇÕES
+      
+      if (!state.massa || !state.tamanho || !nome || !tel) {
+        return alert("Por favor, preencha nome, telefone e escolha Massa e Tamanho.");
+      }
+
+      // Prepara a mensagem para WhatsApp
+      const msg = `*Pedido Guloseimas da Isa*%0A%0A*Cliente:* ${nome}%0A*Telefone:* ${tel}%0A*Massa:* ${state.massa.nome}%0A*Recheio:* ${state.recheio?.nome || 'Nenhum'}%0A*Cobertura:* ${state.cobertura?.nome || 'Nenhuma'}%0A*Tamanho:* ${state.tamanho.nome}%0A*Total:* R$ ${document.getElementById('total-preco').textContent}%0A%0A*Observações:* ${obs || 'Nenhuma'}`; // OBSERVAÇÃO INCLUÍDA
+
+      // Envio de E-mail (Formspree)
+      fetch(`https://formspree.io/f/${FORM_EMAIL}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cliente: nome, telefone: tel, pedido: msg, observacoes: obs })
+      });
+
+      // Abre WhatsApp
+      window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${msg}`, '_blank');
+    });
+
+    // INICIALIZAÇÃO
+    renderChips('massas-grid', MASSAS, 'massa');
+    renderChips('recheios-grid', RECHEIOS, 'recheio');
+    renderChips('coberturas-grid', COBERTURAS, 'cobertura');
+    renderChips('tamanhos-grid', TAMANHOS, 'tamanho');
+    lucide.createIcons();
+  </script>
+</body>
+</html>
